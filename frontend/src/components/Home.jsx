@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify'
 
 const Home = () => {
 
-    const URL = "https://notes-app-backend-kappa.vercel.app/api/v1/"
+    const URL = "https://safe-notes-app.vercel.app/api/v1/"
 
     const navigate = useNavigate();
 

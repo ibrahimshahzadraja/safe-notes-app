@@ -16,7 +16,7 @@ const Signup = () => {
     formState: { errors, isSubmitting },
   } = useForm()
 
-  const url = "https://notes-app-backend-kappa.vercel.app/api/v1/"
+  const url = "https://safe-notes-app.vercel.app/api/v1/"
 
   const [user, setUser] = useState()
   const [initialUserData, setInitialUserData] = useState({

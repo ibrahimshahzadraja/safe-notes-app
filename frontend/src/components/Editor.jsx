@@ -7,7 +7,7 @@ import { handleError, handleSuccess } from '../../utils'
 
 const Editor = () => {
 
-    const URL = "https://notes-app-backend-kappa.vercel.app/api/v1/"
+    const URL = "https://safe-notes-app.vercel.app/api/v1/"
 
     const [note, setNote] = useState();
     const [initialNote, setInitialNote] = useState({});

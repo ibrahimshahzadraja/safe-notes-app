@@ -15,7 +15,7 @@ function App() {
 
   const navigate = useNavigate()
 
-  const URL = "https://notes-app-seven-sigma.vercel.app/api/v1/users"
+  const URL = "https://safe-notes-app.vercel.app/api/v1/users"
 
   useEffect(() => {
 

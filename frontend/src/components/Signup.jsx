@@ -26,7 +26,7 @@ const Signup = () => {
   }, [fileInput])
 
   const onSubmit = async() => {
-    const URL = "https://notes-app-backend-kappa.vercel.app/api/v1/users/register"
+    const URL = "https://safe-notes-app.vercel.app/api/v1/users/register"
 
     const formData = new FormData(document.getElementById('signup-form'))
     let response;

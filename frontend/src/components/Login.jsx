@@ -18,7 +18,7 @@ const Login = () => {
   } = useForm()
 
   const onSubmit = async(data) => {
-    const URL = "https://notes-app-backend-kappa.vercel.app/api/v1/users/login"
+    const URL = "https://safe-notes-app.vercel.app/api/v1/users/login"
 
     let response;
 
