@@ -7,3 +7,5 @@ export const handleSuccess = (msg) => {
 export const handleError = (msg) => {
     toast.error(msg, {position: 'top-right'})
 }
+
+export const backend_url = "http://localhost:8000/api/v1";

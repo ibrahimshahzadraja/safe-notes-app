@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Popup from './Popup'
 import { ToastContainer } from 'react-toastify'
-import { handleError, handleSuccess } from '../../utils'
+import { handleError, handleSuccess, backend_url } from '../../utils'
 
 const Editor = () => {
 
-    const URL = "https://safe-notes-app.vercel.app/api/v1/"
-
     const [note, setNote] = useState();
     const [initialNote, setInitialNote] = useState({});
+    const [isSaved, setIsSaved] = useState(false);
 
     const {noteId} = useParams();
+
+    const navigate = useNavigate();
 
     const saveNote = async() => {
         const title = document.getElementById('title-input').value
@@ -26,28 +27,31 @@ const Editor = () => {
 
         try {
           let response;
-          if(noteId === "new"){
-            response = await axios.post(URL + "notes/create-note", data)
-          }else{
-            response = await axios.patch(URL + `notes/update-note/${noteId}`, data)
-          }
-          handleSuccess("Note saved successfully")
-          setTimeout(() => {
-            if(response.status === 200){
-              window.location.href = "/"
+          if(!isSaved){
+            setIsSaved(true);
+            if(noteId === "new"){
+              response = await axios.post(backend_url + "/notes/create-note", data)
+            }else{
+              response = await axios.patch(backend_url + `/notes/update-note/${noteId}`, data)
             }
-          }, 4000)
+            handleSuccess("Note saved successfully")
+            setTimeout(() => {
+              if(response.status === 200){
+                navigate("/")
+              }
+            }, 4000)
+          }
         } catch (error) {
             handleError("Error while saving the note")
             setTimeout(() => {
-                window.location.href = "/"
+              navigate("/")
         }, 4000)
         }
     }
 
     const getNoteContent = async () => {
       try {
-          let response = await axios.get(URL + `notes/get-note/${noteId}`)
+          let response = await axios.get(backend_url + `/notes/get-note/${noteId}`)
           setNote(response.data.data)
           document.getElementById('title-input').value = response.data.data.title
           document.getElementById('body-input').value = response.data.data.body
@@ -60,10 +64,10 @@ const Editor = () => {
   const handlePopup = () => {
     const currentNote = {title: document.getElementById("title-input").value, body: document.getElementById("body-input").value}
     if(currentNote.title === "" && currentNote.body === ""){
-      window.location.href = "/"
+      navigate("/")
     } else{
       if(currentNote.title === initialNote.title && currentNote.body === initialNote.body){
-        window.location.href = "/"
+        navigate("/")
       } else{
         document.getElementById('save-popup').style.display = "block"
       }
@@ -87,7 +91,7 @@ const Editor = () => {
         <textarea id='body-input' className='w-full min-h-full bg-transparent outline-none resize-none' placeholder='Type Something...'></textarea>
       </div>
       <div className='hidden' id='save-popup'>
-        <Popup onClick={() => {document.getElementById("save-popup").style.display = "none"}} message={"Save Changes?"} redText={"Discard"} greenText={"Save"} redFn={() => window.location.href = "/"} greenFn={saveNote} />
+        <Popup onClick={() => {document.getElementById("save-popup").style.display = "none"}} message={"Save Changes?"} redText={"Discard"} greenText={"Save"} redFn={() => navigate("/")} greenFn={saveNote} />
       </div>
       <ToastContainer />
     </div>

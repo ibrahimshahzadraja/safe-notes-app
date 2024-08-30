@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { handleSuccess, handleError } from '../../utils'
+import { handleSuccess, handleError, backend_url } from '../../utils'
 import { ToastContainer } from 'react-toastify'
 import { Link } from 'react-router-dom'
 import axios from "axios"
@@ -26,23 +26,25 @@ const Signup = () => {
   }, [fileInput])
 
   const onSubmit = async() => {
-    const URL = "https://safe-notes-app.vercel.app/api/v1/users/register"
 
     const formData = new FormData(document.getElementById('signup-form'))
     let response;
 
     try{
-      response = await axios.post(URL, formData, {headers: {'Content-Type' : 'multipart/form-data'}})
+      response = await axios.post(backend_url + "/users/register", formData, {headers: {'Content-Type' : 'multipart/form-data'}})
     } catch(error){
-      const $ = cheerio.load(error.response.data);
-      const preTag = $('pre')
-      const errorMessage = preTag.html().split('<br>')[0].replace("Error: ", "");
-
-      handleError(errorMessage)
+      if(error.response.data.message){
+        handleError(error.response.data.message)
+      } else{
+        const $ = cheerio.load(error.response.data)
+        const errorMessage = $('pre').contents().eq(0).text().replace("Error: ", "");
+        handleError(errorMessage)
+      }
     }
 
     if(response?.data.statusCode === 200){
       handleSuccess(response.data.message)
+      setTimeout(() => {navigate("/")}, 3000)
     }
   }
 

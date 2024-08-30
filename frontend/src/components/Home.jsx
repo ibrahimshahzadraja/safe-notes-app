@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Note from './Note'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
-import { handleError } from '../../utils'
+import { handleError, backend_url } from '../../utils'
 import { ToastContainer } from 'react-toastify'
 
 const Home = () => {
-
-    const URL = "https://safe-notes-app.vercel.app/api/v1/"
 
     const navigate = useNavigate();
 
@@ -65,7 +63,7 @@ const Home = () => {
 
         const getUserData = async() => {
             try {
-                response = await axios.get(URL + "users/get-user")
+                response = await axios.get(backend_url + "/users/get-user")
                 setUser(response.data.data)
             } catch (error) {
                 handleError("Error while getting user data")
@@ -74,7 +72,7 @@ const Home = () => {
         
         const getNoteData = async() => {
             try {
-                response = await axios.get(URL + "notes/get-all-notes")
+                response = await axios.get(backend_url + "/notes/get-all-notes")
                 setNotes(response.data.data)
             } catch (error) {
                 handleError("Error while fetching notes")
@@ -112,10 +110,10 @@ const Home = () => {
             </div>
         </div>
         <div className="user-profile group relative w-full sm:w-[50vw] max-w-[350px] flex gap-2 items-center bg-gradient-to-r from-darkGray via-darkGray to-amber-900 p-2 rounded-lg">
-            <div className="image">
-                <img className='rounded-full w-[60px] h-[60px] sm:w-[90px] sm:h-[90px] p-2' src={user?.avatar} alt="" />
+            <div className="image w-[80px]">
+                <img className='rounded-full w-[80px] h-[80px] p-2' src={user?.avatar} alt="" />
             </div>
-            <div className="profile-text sm:font-normal font-light text-sm sm:text-base">
+            <div className="profile-text w-[75%] sm:font-normal font-light text-sm sm:text-base">
                 <h3 className='text-2xl'>{user?.username}</h3>
                 <p>{user?.about}</p>
             </div>
@@ -138,7 +136,7 @@ const Home = () => {
             </div>
         </div>
       </div>
-    <span className="material-symbols-outlined bg-[#252525] p-1.5 rounded-full fixed bottom-5 right-5 cursor-pointer"><Link to={"/editor/new"}>add</Link></span>
+    <span className="material-symbols-outlined bg-[#252525] p-1.5 z-10 rounded-full fixed bottom-5 right-5 cursor-pointer"><Link to={"/editor/new"}>add</Link></span>
     {notes.length===0 && <div className="image absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <img src="/first-note.png" alt="" />
     </div>}

@@ -24,12 +24,11 @@ export const signupValidation = asyncHandler( async (req, res, next) => {
 export const updateProfileValidation = asyncHandler( async (req, res, next) => {
     const schema = Joi.object({
         username: Joi.string().min(5).max(20).regex(/^[a-zA-Z0-9_]+$/).messages({'string.pattern.base': "Only letters and numbers are allowed in username"}),
-        password: Joi.string().min(8),
-        about: Joi.string().max(97),
-        confirmPassword: Joi.string().min(8)
+        about: Joi.string().max(97)
     })
 
-    const {avatar, ...data} = req.body
+    console.log(req.body)
+    const {avatar, oldPassword, newPassword, ...data} = req.body
     const {error} = schema.validate(data)
 
     if(error){

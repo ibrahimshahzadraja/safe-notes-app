@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { handleSuccess, handleError } from '../../utils'
+import { handleSuccess, handleError, backend_url } from '../../utils'
 import { ToastContainer } from 'react-toastify'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import Popup from "./Popup"
 import * as cheerio from "cheerio"
@@ -16,7 +16,6 @@ const Signup = () => {
     formState: { errors, isSubmitting },
   } = useForm()
 
-  const url = "https://safe-notes-app.vercel.app/api/v1/"
 
   const [user, setUser] = useState()
   const [initialUserData, setInitialUserData] = useState({
@@ -26,6 +25,7 @@ const Signup = () => {
   })
 
   const [imageUrl, setImageUrl] = useState();
+  const navigate = useNavigate();
 
   const fileInput = watch('avatar')
 
@@ -38,7 +38,7 @@ const Signup = () => {
   const getUserData = async() => {
     let response;
     try {
-        response = await axios.get(url + "users/get-user")
+        response = await axios.get(backend_url + "/users/get-user")
         setUser(response.data.data)
         setInitialUserData({...response.data.data})
     } catch (error) {
@@ -74,19 +74,14 @@ const Signup = () => {
     let response;
 
     try{
-      response = await axios.patch(url + "users/update-profile", formData, {headers: {'Content-Type' : 'multipart/form-data'}})
+      response = await axios.patch(backend_url + "/users/update-profile", formData, {headers: {'Content-Type' : 'multipart/form-data'}})
       if(response.status === 200){
         handleSuccess("Profile updated successfully")
-        setTimeout(() => {window.location.href = "/"}, 3000)
-      }else{
-        console.log(response.data)
+        setTimeout(() => {navigate("/")}, 3000)
       }
     } catch(error){
-      console.log("ERROR: ", error)
-      const $ = cheerio.load(error.response.data);
-      const preTag = $('pre')
-      const errorMessage = preTag.html().split('<br>')[0].replace("Error: ", "");
-
+      const $ = cheerio.load(error.response.data)
+      const errorMessage = $('pre').contents().eq(0).text().replace("Error: ", "");
       handleError(errorMessage)
     }
   }
@@ -147,7 +142,7 @@ const Signup = () => {
         </form>
         <span onClick={() => document.getElementById("update-popup").style.display = "block"} className="material-symbols-outlined text-white absolute top-1 right-1 cursor-pointer">close</span>
         <div className='hidden' id='update-popup'>
-          <Popup message={"Leave without changes?"} redText={"No"} greenText={"Yes"} redFn={() => {document.getElementById("update-popup").style.display = "none"}} greenFn={() => window.location.href = "/"} />
+          <Popup message={"Leave without changes?"} redText={"No"} greenText={"Yes"} redFn={() => {document.getElementById("update-popup").style.display = "none"}} greenFn={() => navigate("/")} />
         </div>
       </div>
     <ToastContainer />

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { handleSuccess, handleError } from '../../utils'
+import { handleSuccess, handleError, backend_url } from '../../utils'
 import { ToastContainer } from 'react-toastify'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import * as cheerio from "cheerio"
 import { useNavigate } from 'react-router-dom'
+import * as cheerio from "cheerio"
 
 const Login = () => {
 
@@ -18,23 +18,24 @@ const Login = () => {
   } = useForm()
 
   const onSubmit = async(data) => {
-    const URL = "https://safe-notes-app.vercel.app/api/v1/users/login"
 
     let response;
 
     try{
-      response = await axios.post(URL, {...data})
+      response = await axios.post(backend_url + "/users/login", {...data})
       if(response.status === 200){
         setTimeout(() => {
           navigate("/")
         }, 2000)
       }
     } catch(error){
-      const $ = cheerio.load(error.response.data);
-      const preTag = $('pre')
-      const errorMessage = preTag.html().split('<br>')[0].replace("Error: ", "");
-
-      handleError(errorMessage)
+      if(error.response.data.message){
+        handleError(error.response.data.message)
+      } else{
+        const $ = cheerio.load(error.response.data)
+        const errorMessage = $('pre').contents().eq(0).text().replace("Error: ", "");
+        handleError(errorMessage)
+      }
     }
 
     if(response?.data.statusCode === 200){

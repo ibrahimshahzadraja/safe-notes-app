@@ -1,28 +1,26 @@
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom"
+import { Routes, Route, useNavigate } from "react-router-dom"
 import Signup from "./components/Signup"
 import Login from "./components/Login"
 import Home from "./components/Home"
 import Editor from "./components/Editor"
 import UpdateProfile from "./components/UpdateProfile"
 import './App.css'
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import axios from "axios"
 import Preview from "./components/Preview"
-import Popup from "./components/Popup"
+import { backend_url } from "../utils"
 
 function App() {
   axios.defaults.withCredentials = true;
 
   const navigate = useNavigate()
 
-  const URL = "https://safe-notes-app.vercel.app/api/v1/users"
-
   useEffect(() => {
 
     const getData = async() => {
   
       try {
-        await axios.get(URL + "/get-user")
+        await axios.get(backend_url + "/users/get-user")
       } catch (error) {
         refreshToken()
       }
@@ -35,7 +33,7 @@ function App() {
 
   const refreshToken = async () => {
     try {
-      let res = await axios.post(URL + "/refresh-token")
+      let res = await axios.post(backend_url + "/users/refresh-token")
       window.location.reload(true)
     } catch (error) {
       navigate("/login")
@@ -51,7 +49,6 @@ function App() {
       <Route path='/editor/:noteId' element={<Editor />} />
       <Route path='/preview-note/:noteId' element={<Preview />} />
       <Route path='/update-profile' element={<UpdateProfile />} />
-      <Route path='/u' element={<Popup />} />
     </Routes>
     </>
   )
