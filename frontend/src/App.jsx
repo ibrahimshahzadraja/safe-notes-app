@@ -34,7 +34,6 @@ function App() {
   const refreshToken = async () => {
     try {
       let res = await axios.post(backend_url + "/users/refresh-token")
-      window.location.reload(true)
     } catch (error) {
       navigate("/login")
     }

@@ -46,7 +46,7 @@ const Preview = () => {
       <div className="icons w-full flex justify-between items-center">
         <span className="material-symbols-outlined text-3xl bg-[#664430] p-1.5 rounded-lg cursor-pointer"><Link to={"/"}>keyboard_arrow_left</Link></span>
         <div className='flex gap-2'>
-            <span onClick={() => {window.location.href = `/editor/${noteId}`}} className="material-symbols-outlined text-3xl bg-[#664430] p-1.5 rounded-lg cursor-pointer">edit</span>
+            <span onClick={() => navigate(`/editor/${noteId}`)} className="material-symbols-outlined text-3xl bg-[#664430] p-1.5 rounded-lg cursor-pointer">edit</span>
             <span onClick={() => document.getElementById("delete-popup").style.display = "block"} className="material-symbols-outlined text-3xl bg-[#664430] p-1.5 rounded-lg cursor-pointer">delete</span>
         </div>
       </div>

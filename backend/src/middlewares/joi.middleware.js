@@ -6,8 +6,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 export const signupValidation = asyncHandler( async (req, res, next) => {
     const schema = Joi.object({
         username: Joi.string().min(5).max(20).required().regex(/^[a-zA-Z0-9_]+$/).messages({'string.pattern.base': "Only letters and numbers are allowed in username"}),
-        password: Joi.string().min(8).required(),
         about: Joi.string().max(97),
+        password: Joi.string().min(8).required(),
         confirmPassword: Joi.string().min(8).required()
     })
 

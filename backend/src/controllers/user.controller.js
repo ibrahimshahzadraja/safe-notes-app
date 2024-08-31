@@ -158,7 +158,7 @@ const updateUserProfile = asyncHandler(async(req, res) => {
 
     if(oldPassword && newPassword){
         if (oldPassword.length < 8 || newPassword.length < 8){
-            throw new ApiError(400, "Password lengths must be atleast 8 characters")
+            throw new ApiError(400, "Passwords length must be atleast 8 characters")
         }
         const user = await User.findById(req.user?._id)
     
@@ -170,7 +170,8 @@ const updateUserProfile = asyncHandler(async(req, res) => {
     
         user.password = newPassword;
         await user.save({validateBeforeSave: false})
-    } else{
+    }
+    if((oldPassword === "" && newPassword) || (newPassword === "" && oldPassword)){
         throw new ApiError(400, "Both passwords are required")
     }
 

@@ -151,7 +151,7 @@ const Home = () => {
             return new Date(a.createdAt) - new Date(b.createdAt); // Oldest first
         }
     }).map((note, i) => <div key={i} onClick={() => previewNote(note._id)}>
-        <Note createdAt={note.createdAt.replace("T", " ").split(".")[0]} title={note.title} body={note.body.split(" ").slice(0, 2).join(" ") + "..."} /></div>)}
+        <Note createdAt={note.createdAt.replace("T", " ").split(".")[0]} title={note.title} body={note.body.split(" ")[0].length < 15 ? note.body.split(" ").slice(0, 2).join(" ") + "..." : note.body.split(" ")[0].slice(0, 15) + "..." } /></div>)}
     </div>
     <ToastContainer />
     </div>

@@ -80,9 +80,13 @@ const Signup = () => {
         setTimeout(() => {navigate("/")}, 3000)
       }
     } catch(error){
-      const $ = cheerio.load(error.response.data)
-      const errorMessage = $('pre').contents().eq(0).text().replace("Error: ", "");
-      handleError(errorMessage)
+      if(error.response.data.message){
+        handleError(error.response.data?.message)
+      } else{
+        const $ = cheerio.load(error.response.data)
+        const errorMessage = $('pre').contents().eq(0).text().replace("Error: ", "");
+        handleError(errorMessage)
+      }
     }
   }
 
