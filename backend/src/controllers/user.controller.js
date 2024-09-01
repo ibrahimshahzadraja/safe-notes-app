@@ -31,6 +31,10 @@ const registerUser = asyncHandler( async(req, res) => {
 
     const {username, password, confirmPassword, about} = req.body
 
+    if(!req.avatarStr){
+        throw new ApiError(400, "Avatar is required")
+    }
+
     if(!(password===confirmPassword)){
         throw new ApiError(400, "Passwords doesn't match")
     }
@@ -48,7 +52,7 @@ const registerUser = asyncHandler( async(req, res) => {
     const avatar = await uploadOnCloudinary(req.avatarStr)
     
     if(!avatar){
-        throw new ApiError(400, "Avatar is required")
+        throw new ApiError(500, "Error while uploading avatar")
     }
 
     const user = await User.create({
@@ -151,6 +155,10 @@ const updateUserProfile = asyncHandler(async(req, res) => {
     
     if(username !== ''){
         update["username"] = username
+        const user = await User.findOne({username})
+        if(user){
+            throw new ApiError(400, "Username already exists")
+        }
     }
     if(about !== ''){
         update["about"] = about

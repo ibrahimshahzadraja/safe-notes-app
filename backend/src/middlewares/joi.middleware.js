@@ -5,7 +5,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 export const signupValidation = asyncHandler( async (req, res, next) => {
     const schema = Joi.object({
-        username: Joi.string().min(5).max(20).required().regex(/^[a-zA-Z0-9_]+$/).messages({'string.pattern.base': "Only letters and numbers are allowed in username"}),
+        username: Joi.string().min(5).max(18).required().regex(/^[a-zA-Z0-9_]+$/).messages({'string.pattern.base': "Only letters and numbers are allowed in username"}),
         about: Joi.string().max(97),
         password: Joi.string().min(8).required(),
         confirmPassword: Joi.string().min(8).required()
@@ -23,7 +23,7 @@ export const signupValidation = asyncHandler( async (req, res, next) => {
 
 export const updateProfileValidation = asyncHandler( async (req, res, next) => {
     const schema = Joi.object({
-        username: Joi.string().min(5).max(20).regex(/^[a-zA-Z0-9_]+$/).messages({'string.pattern.base': "Only letters and numbers are allowed in username"}),
+        username: Joi.string().min(5).max(18).regex(/^[a-zA-Z0-9_]+$/).messages({'string.pattern.base': "Only letters and numbers are allowed in username"}),
         about: Joi.string().max(97)
     })
 
@@ -40,7 +40,7 @@ export const updateProfileValidation = asyncHandler( async (req, res, next) => {
 
 export const loginValidation = (req, res, next) => {
     const schema = Joi.object({
-        username: Joi.string().min(5).max(20).required(),
+        username: Joi.string().min(5).max(18).required(),
         password: Joi.string().min(8).required(),
     })
 

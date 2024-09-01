@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Note from './Note'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
-import { handleError, backend_url } from '../../utils'
+import { handleError, backend_url, handleSuccess } from '../../utils'
 import { ToastContainer } from 'react-toastify'
 
 const Home = () => {
@@ -14,6 +14,7 @@ const Home = () => {
     const [notes, setNotes] = useState([])
     const [search, setSearch] = useState("")
     const [newest, setNewest] = useState(true)
+    const [disabledLogout, setDisabledLogout] = useState(false);
 
     const handleSearch = () => {
         const searchIcon = document.getElementById("search-icon")
@@ -90,9 +91,19 @@ const Home = () => {
         }
     }
 
-    const editNote = async (noteId) => {
-        if(noteId){
-            navigate(`/editor/${noteId}`)
+    const logoutUser = async () => {
+        if(!disabledLogout){
+            setDisabledLogout(true);
+            try {
+                const response = await axios.get(backend_url + '/users/logout')
+                if(response.status === 200){
+                    handleSuccess("User logged out")
+                    setTimeout(() => navigate('/login'), 3000)
+                }
+            } catch (error) {
+                handleError("Error while logging out")
+                setDisabledLogout(false);
+            }
         }
     }
 
@@ -153,6 +164,7 @@ const Home = () => {
     }).map((note, i) => <div key={i} onClick={() => previewNote(note._id)}>
         <Note createdAt={note.createdAt.replace("T", " ").split(".")[0]} title={note.title} body={note.body.split(" ")[0].length < 15 ? note.body.split(" ").slice(0, 2).join(" ") + "..." : note.body.split(" ")[0].slice(0, 15) + "..." } /></div>)}
     </div>
+    <div onClick={logoutUser} className="logout-button bg-gradient-to-r hover:bg-gradient-to-l from-darkGray to-amber-900 fixed bottom-5 left-5 cursor-pointer px-2 py-1 rounded-lg flex items-center"><span className="material-symbols-outlined">logout</span>Logout</div>
     <ToastContainer />
     </div>
   )
