@@ -27,12 +27,12 @@ export const updateProfileValidation = asyncHandler( async (req, res, next) => {
         about: Joi.string().max(97)
     })
 
-    console.log(req.body)
-    const {avatar, oldPassword, newPassword, ...data} = req.body
+
+    const {avatar, oldPassword, newPassword, usernameChanged, ...data} = req.body
     const {error} = schema.validate(data)
 
     if(error){
-        res.status(400).json(new ApiResponse(400, {}, error?.details[0].message))
+        res.status(400).json(new ApiResponse(400, {}, error?.details[0].message || error.message))
     }
 
     next()

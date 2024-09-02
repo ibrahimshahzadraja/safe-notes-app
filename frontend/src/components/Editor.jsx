@@ -15,6 +15,10 @@ const Editor = () => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+      document.title = "Safe Notes - Editor"
+    }, [])
+
     const saveNote = async() => {
         const title = document.getElementById('title-input').value
         const body = document.getElementById('body-input').value

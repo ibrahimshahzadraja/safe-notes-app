@@ -16,6 +16,9 @@ const Signup = () => {
     formState: { errors, isSubmitting },
   } = useForm()
 
+  useEffect(() => {
+    document.title = "Safe Notes - Update Profile"
+  }, [])
 
   const [user, setUser] = useState()
   const [initialUserData, setInitialUserData] = useState({
@@ -65,12 +68,21 @@ const Signup = () => {
 }
 
   const onSubmit = async(data) => {
+    let usernameChanged;
     if(isObjectEmpty(data)){
       //toast to tell user that nothing was changed
       handleError("Please make changes to save")
       return
     }
+
+
+    if(initialUserData.username === document.getElementById("username").value){
+      usernameChanged = false;
+    } else{
+      usernameChanged = true
+    }
     const formData = new FormData(document.getElementById('update-profile-form'))
+    formData.append("usernameChanged", usernameChanged)
     let response;
 
     try{
@@ -81,7 +93,7 @@ const Signup = () => {
       }
     } catch(error){
       if(error.response.data.message){
-        handleError(error.response.data?.message)
+        handleError(error.response.data.message)
       } else{
         const $ = cheerio.load(error.response.data)
         const errorMessage = $('pre').contents().eq(0).text().replace("Error: ", "");
@@ -124,7 +136,7 @@ const Signup = () => {
           </div>
           <div className='form-field text-slate-400 flex flex-col relative'>
             <label className='text-slate-400' htmlFor="username">Username</label>
-            <input defaultValue={initialUserData.username} className='px-8 py-2 rounded-lg outline-none bg-gradient-to-r from-lightGray to-black' placeholder='Username' type="text" {...register("username")} />
+            <input defaultValue={initialUserData.username} className='px-8 py-2 rounded-lg outline-none bg-gradient-to-r from-lightGray to-black' placeholder='Username' type="text" id='username' {...register("username")} />
             <span className="material-symbols-outlined absolute top-8 px-1">person</span>
           </div>
           <div className='form-field text-slate-400 flex flex-col relative'>

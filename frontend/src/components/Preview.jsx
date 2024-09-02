@@ -11,6 +11,10 @@ const Preview = () => {
     const {noteId} = useParams();
     const navigate = useNavigate();
 
+    useEffect(() => {
+      document.title = "Safe Notes - Note Preview"
+    }, [])
+
     const [note, setNote] = useState();
 
     const getNoteContent = async () => {

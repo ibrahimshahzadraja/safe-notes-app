@@ -148,18 +148,19 @@ const getCurrentUser = asyncHandler(async(req, res) => {
 
 
 const updateUserProfile = asyncHandler(async(req, res) => {
-    const {username, about, oldPassword, newPassword} = req.body
+    const {username, about, oldPassword, newPassword, usernameChanged} = req.body
 
     
     const update = {}
-    
-    if(username !== ''){
-        update["username"] = username
+
+    if(usernameChanged !== 'false'){
         const user = await User.findOne({username})
         if(user){
             throw new ApiError(400, "Username already exists")
         }
+        update["username"] = username
     }
+
     if(about !== ''){
         update["about"] = about
     }

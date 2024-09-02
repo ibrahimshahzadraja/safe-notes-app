@@ -16,6 +16,10 @@ const Home = () => {
     const [newest, setNewest] = useState(true)
     const [disabledLogout, setDisabledLogout] = useState(false);
 
+    useEffect(() => {
+        document.title = "Safe Notes - Home"
+      }, [])
+
     const handleSearch = () => {
         const searchIcon = document.getElementById("search-icon")
         const searchInput = document.getElementById("search-input")
@@ -38,20 +42,6 @@ const Home = () => {
             dropdown.style.display = "none"
         } else{
             dropdown.style.display = "block"
-        }
-    }
-
-    const handleDeleteIcon = () => {
-        setSelect(s => !s)
-        const deleteIcon = document.getElementById("delete-icon")
-        const filterIcon = document.getElementById("filter-icon")
-        
-        if(deleteIcon.style.display){
-            deleteIcon.style.display = "none"
-            filterIcon.style.display = "block"
-        } else{
-            deleteIcon.style.display = "block"
-            filterIcon.style.display = "none"
         }
     }
 
@@ -135,7 +125,6 @@ const Home = () => {
         <p className='text-xl font-light underline'>All({notes.length})</p>
         <div className="relative">
             <span id='filter-icon' className="material-symbols-outlined text-blue-600 cursor-pointer" onClick={handleDropdown}>filter_alt</span>
-            <span id='delete-icon' className="material-symbols-outlined cursor-pointer hidden">delete</span>
             <div className='dropdown p-2 bg-[#332218] w-40 z-10 rounded-md absolute right-0 hidden' id='filter-dropdown'>
                 <p>Sort by</p>
                 <div>

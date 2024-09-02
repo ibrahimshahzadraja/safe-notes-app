@@ -15,6 +15,10 @@ const Signup = () => {
     formState: { errors, isSubmitting },
   } = useForm()
 
+  useEffect(() => {
+    document.title = "Safe Notes - SignUp"
+  }, [])
+
   const [imageUrl, setImageUrl] = useState();
 
   const fileInput = watch('avatar')

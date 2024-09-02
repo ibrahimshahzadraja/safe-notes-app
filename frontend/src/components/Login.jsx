@@ -11,6 +11,10 @@ const Login = () => {
 
   const navigate = useNavigate()
 
+  useEffect(() => {
+    document.title = "Safe Notes - Login"
+  }, [])
+
   let {
     register,
     handleSubmit,
