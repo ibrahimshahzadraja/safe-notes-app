@@ -32,40 +32,40 @@ const registerUser = asyncHandler( async(req, res) => {
     const {username, password, confirmPassword, about} = req.body
 
     if(!req.avatarStr){
-        throw new ApiError(400, "Avatar is required")
+        res.status(400).json(new ApiResponse(400, {}, "Avatar is required"))
     }
-
+    
     if(!(password===confirmPassword)){
-        throw new ApiError(400, "Passwords doesn't match")
+        res.status(400).json(new ApiResponse(400, {}, "Passwords doesn't match"))
     }
-
+    
     if(!username || !password){
-        throw new ApiError(400, "Username and Password is required")
+        res.status(400).json(new ApiResponse(400, {}, "Username and Password is required"))
     }
-
+    
     const existedUser = await User.findOne({username})
-
+    
     if(existedUser){
-        throw new ApiError(409, "User already exist")
+        res.status(400).json(new ApiResponse(400, {}, "User already exist"))
     }
     
     const avatar = await uploadOnCloudinary(req.avatarStr)
     
     if(!avatar){
-        throw new ApiError(500, "Error while uploading avatar")
+        res.status(500).json(new ApiResponse(500, {}, "Error while uploading avatar"))
     }
-
+    
     const user = await User.create({
         username,
         password,
         about,
         avatar: avatar?.url
     })
-
+    
     const createdUser = await User.findById(user._id).select("-password -refreshToken")
-
+    
     if(!createdUser){
-        throw new ApiError(500, "Error while registering the user.")
+        res.status(500).json(new ApiResponse(500, {}, "Error while registering the user."))
     }
 
     res.status(200).json(new ApiResponse(200, createdUser, "User registered successfully"))
